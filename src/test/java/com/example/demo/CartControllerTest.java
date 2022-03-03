@@ -11,14 +11,14 @@ import com.example.demo.model.requests.ModifyCartRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
+import static com.example.demo.TestUtils.createItem;
+import static com.example.demo.TestUtils.createUser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
@@ -26,29 +26,12 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class cartControllerTest {
+public class CartControllerTest {
 
 	private CartController cartController;
 	private final UserRepository userRepository = mock(UserRepository.class);
 	private final CartRepository cartRepository = mock(CartRepository.class);
 	private final ItemRepository itemRepository = mock(ItemRepository.class);
-
-	public static Item createItem(Long id) {
-		Item item = new Item();
-		item.setId(id);
-		item.setPrice(BigDecimal.valueOf(10));
-		item.setName("Obj #" + id);
-		item.setDescription("This is the description of Obj #" + id);
-		return item;
-	}
-
-	public static User createUser(Long id) {
-		User user = new User();
-		user.setId(id);
-		user.setUsername("user" + id);
-		user.setPassword("userpw" + id);
-		return user;
-	}
 
 	@Before
 	public void setUp() {
@@ -79,7 +62,7 @@ public class cartControllerTest {
 	}
 
 	@Test
-	public void addToCartSucess() {
+	public void addToCartSuccess() {
 		ModifyCartRequest req = new ModifyCartRequest();
 		req.setUsername("user1");
 		req.setItemId(1L);
