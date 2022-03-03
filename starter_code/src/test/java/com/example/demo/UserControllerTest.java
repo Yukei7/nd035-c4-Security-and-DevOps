@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
