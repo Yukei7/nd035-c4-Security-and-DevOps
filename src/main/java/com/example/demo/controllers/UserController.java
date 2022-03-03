@@ -43,26 +43,30 @@ public class UserController {
 	@GetMapping("/{username}")
 	public ResponseEntity<User> findByUserName(@PathVariable String username) {
 		User user = userRepository.findByUsername(username);
-		return user == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(user);
+		if (user == null) {
+			log.error("Unable to find user. username not found:" + username);
+			return ResponseEntity.notFound().build();
+		}
+		log.info("Successfully find username:" + username);
+		return ResponseEntity.ok(user);
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-		log.info("User name set with ", createUserRequest.getUsername());
 		Cart cart = new Cart();
-
 		cartRepository.save(cart);
 		user.setCart(cart);
 
 		// authentication
 		if (createUserRequest.getPassword().length() < 7 || !createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
-			// log.error("Error with user password. Cannot create user {}", createUserRequest.getUsername());
+			 log.error("Error with user password. Cannot create user" + createUserRequest.getUsername());
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		userRepository.save(user);
+		log.info("Successfully create user:" + user.getUsername());
 		return ResponseEntity.ok(user);
 	}
 	
