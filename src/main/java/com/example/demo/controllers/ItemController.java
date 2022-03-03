@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +32,13 @@ public class ItemController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Item> getItemById(@PathVariable Long id) {
+		Optional<Item> item = itemRepository.findById(id);
+		if (!item.isPresent()) {
+			log.error("Unable to get items. item id not found:" + id);
+			return ResponseEntity.notFound().build();
+		}
 		log.info("Successfully get item with id:" + id);
-		return ResponseEntity.of(itemRepository.findById(id));
+		return ResponseEntity.ok(item.get());
 	}
 	
 	@GetMapping("/name/{name}")
